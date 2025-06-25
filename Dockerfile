@@ -43,6 +43,7 @@ RUN apt-get update && apt-get install -y \
     php-soap \
     php-mysql \
     php-curl \
+    libxml-entities-perl \
     php-xml \
     php-zip \
     php-gd \
