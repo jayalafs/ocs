@@ -2,17 +2,17 @@ version: '3'
 
 services:
   ocsapplication:
-    image: ocsinventory/ocsinventory-docker-image:2.12.3
+    image: ocsinventory/ocsinventory-docker-image:2.9
     container_name : ocsinventory-server
     restart: always
-    expose:
-      - "82:80"
+    ports:
+      - 82:80
+      - 444:443
     volumes:
       - "perlcomdata:/etc/ocsinventory-server"
       - "ocsreportsdata:/usr/share/ocsinventory-reports/ocsreports/extensions"
       - "varlibdata:/var/lib/ocsinventory-reports"
-      - "httpdconfdata:/etc/apache2/conf-available"
-      - "profilesconfdata:/usr/share/ocsinventory-reports/ocsreports/config/profiles"
+      - "httpdconfdata:/etc/httpd/conf.d"
     environment:
       OCS_DB_SERVER: ocsinventory-db
       OCS_DB_USER: ocsuser
@@ -20,7 +20,6 @@ services:
       OCS_DB_NAME: ocsweb
       # See documentation to set up SSL for MySQL
       OCS_SSL_ENABLED: 0
-      OCS_DBI_PRINT_ERROR: 0
     links:
       - ocsdb
     networks:
@@ -29,11 +28,11 @@ services:
       - ocsdb    
 
   ocsdb :
-    image : mysql:8.0
+    image : mysql:5.7
     container_name : ocsinventory-db
     restart: always
-    expose :
-      - "3306"
+    ports :
+      - 3306:3306
     volumes :
       - ./sql/:/docker-entrypoint-initdb.d/
       - sqldata:/var/lib/mysql
@@ -54,4 +53,4 @@ volumes:
   varlibdata:
   httpdconfdata:
   sqldata:
-  profilesconfdata:
+  
